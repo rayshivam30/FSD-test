@@ -4,14 +4,17 @@ const getAllProducts = async (req, res) => {
   try {
     const { search, page = 1, limit = 10 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
-    const filter = search
-      ? {
-          $or: [
-            { name: { $regex: search, $options: "i" } },
-            { metaTitle: { $regex: search, $options: "i" } },
-          ],
-        }
-      : {};
+    const filter = {
+      user: req.user.id,
+      ...(search
+        ? {
+            $or: [
+              { name: { $regex: search, $options: "i" } },
+              { metaTitle: { $regex: search, $options: "i" } },
+            ],
+          }
+        : {}),
+    };
 
     const [products, total] = await Promise.all([
       Product.find(filter).sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)),
@@ -32,9 +35,12 @@ const getAllProducts = async (req, res) => {
 // GET /api/products/:id
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
     if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found." });
+      return res.status(404).json({ success: false, message: "Product not found or access denied." });
     }
     return res.json({ success: true, data: product });
   } catch (err) {
@@ -46,9 +52,12 @@ const getProductById = async (req, res) => {
 // GET /api/products/slug/:slug
 const getProductBySlug = async (req, res) => {
   try {
-    const product = await Product.findOne({ slug: req.params.slug });
+    const product = await Product.findOne({
+      slug: req.params.slug,
+      user: req.user.id,
+    });
     if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found." });
+      return res.status(404).json({ success: false, message: "Product not found or access denied." });
     }
     return res.json({ success: true, data: product });
   } catch (err) {
@@ -75,6 +84,7 @@ const createProduct = async (req, res) => {
       price,
       discountedPrice: discountedPrice ?? null,
       description,
+      user: req.user.id,
     });
 
     return res.status(201).json({ success: true, message: "Product created.", data: product });
@@ -88,9 +98,12 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const existing = await Product.findById(id);
+    const existing = await Product.findOne({
+      _id: id,
+      user: req.user.id,
+    });
     if (!existing) {
-      return res.status(404).json({ success: false, message: "Product not found." });
+      return res.status(404).json({ success: false, message: "Product not found or access denied." });
     }
 
     if (req.body.slug && req.body.slug !== existing.slug) {
@@ -123,10 +136,13 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await Product.findByIdAndDelete(id);
+    const deleted = await Product.findOneAndDelete({
+      _id: id,
+      user: req.user.id,
+    });
     
     if (!deleted) {
-      return res.status(404).json({ success: false, message: "Product not found." });
+      return res.status(404).json({ success: false, message: "Product not found or access denied." });
     }
 
     return res.json({ success: true, message: "Product deleted successfully." });

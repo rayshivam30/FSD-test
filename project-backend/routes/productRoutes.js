@@ -14,9 +14,9 @@ const validate = require("../middleware/validate");
 const { productCreateSchema, productUpdateSchema } = require("../validators/productValidator");
 
 
-router.get("/", getAllProducts);
-router.get("/slug/:slug", getProductBySlug);
-router.get("/:id", getProductById);
+router.get("/", authMiddleware, getAllProducts);
+router.get("/slug/:slug", authMiddleware, getProductBySlug);
+router.get("/:id", authMiddleware, getProductById);
 
 
 router.post("/", authMiddleware, validate(productCreateSchema), createProduct);
