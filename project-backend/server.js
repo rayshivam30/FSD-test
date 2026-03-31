@@ -12,6 +12,9 @@ const productRoutes = require('./routes/productRoutes');
 
 const app = express();
 
+// Trust reverse proxy (Important for Railway/Render)
+app.set("trust proxy", 1);
+
 app.use(helmet());
 
 // Split origins and trim whitespace
@@ -19,11 +22,13 @@ const allowedOrigins = (process.env.CLIENT_ORIGIN || "").split(",").map(o => o.t
 
 app.use(cors({
   origin: function (origin, callback) {
-    // If it's a server-side request (no origin) or the origin is in our list
+    // Debug log to see incoming origin in Railway logs
+    console.log(`CORS Preflight from origin: ${origin || 'No Origin (Server-side)'}`);
+
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      console.error(`Blocked by CORS: ${origin}`);
+      console.error(`Blocked by CORS Policy: ${origin}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
