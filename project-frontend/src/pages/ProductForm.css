@@ -1,0 +1,173 @@
+.pf-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.pf-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 1.5rem;
+}
+
+.pf-errors {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  color: #dc2626;
+  font-size: 0.875rem;
+}
+
+.pf-errors p { margin: 0.15rem 0; }
+
+.pf-form { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.pf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 700px) {
+  .pf-grid { grid-template-columns: 1fr; }
+}
+
+.pf-col { display: flex; flex-direction: column; gap: 1.2rem; }
+
+.pf-prices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-hint { color: #64748b; font-size: 0.75rem; font-weight: 400; }
+
+.pf-image-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pf-image-row input { flex: 1; }
+
+.pf-remove-img {
+  background: #ffffff;
+  color: #ef4444;
+  border: 1px solid #e2e8f0;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.pf-remove-img:hover { 
+  background: #ef4444; 
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.pf-add-img {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  color: #475569;
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 0.25rem;
+  width: 100%;
+}
+
+.pf-add-img:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+/* CKEditor overrides */
+.pf-ckeditor-wrapper {
+  color: #000;
+}
+
+.pf-ckeditor-wrapper .ck-editor__editable {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  border-top: none !important;
+  min-height: 250px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.pf-ckeditor-wrapper .ck-toolbar {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.pf-ckeditor-wrapper .ck-button { color: #475569 !important; }
+.pf-ckeditor-wrapper .ck-button:hover { background: #e2e8f0 !important; }
+.pf-ckeditor-wrapper .ck-button.ck-on { background: #ffffff !important; color: #2563eb !important; }
+.pf-ckeditor-wrapper .ck-editor__editable:focus { border-color: #3b82f6 !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;}
+
+.pf-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pf-btn-cancel {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.pf-btn-cancel:hover { 
+  background: #f1f5f9;
+  color: #0f172a; 
+}
+
+.pf-btn-submit { width: auto; min-width: 160px; }
+
+.pf-loading {
+  text-align: center;
+  padding: 4rem;
+  color: #64748b;
+}
+
+/* Restore exact CKEditor native list types destroyed by global resets */
+.ck-content ul {
+  padding-left: 1.5rem !important;
+  list-style-type: disc !important;
+  margin-bottom: 1rem !important;
+}
+
+.ck-content ol {
+  padding-left: 1.5rem !important;
+  list-style-type: decimal !important;
+  margin-bottom: 1rem !important;
+}
+
+.ck-content li {
+  margin-bottom: 0.25rem !important;
+  display: list-item !important;
+}
