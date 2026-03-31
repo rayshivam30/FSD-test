@@ -19,7 +19,7 @@ test.describe.serial('Authentication Flow', () => {
     await page.click('button[type="submit"]');
 
     await expect(page).toHaveURL(/.*localhost:5173\//);
-    await expect(page.locator(`text=${testUsername}`)).toBeVisible(); 
+    await expect(page.locator('.nav-user')).toContainText(testUsername);
     await expect(page.locator('button', { hasText: 'Logout' })).toBeVisible();
   });
 

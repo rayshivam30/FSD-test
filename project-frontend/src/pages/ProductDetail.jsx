@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import ImageSlider from "../components/ImageSlider";
 import { useAuth } from "../context/AuthContext";
+import Swal from "sweetalert2";
 import "./ProductDetail.css";
 
 const ProductDetail = () => {
@@ -29,12 +30,41 @@ const ProductDetail = () => {
   }, [slug]);
 
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
-    try {
-      await api.delete(`/products/${product.id}`);
-      navigate("/");
-    } catch (err) {
-      alert(err.response?.data?.message || "Delete failed");
+    const result = await Swal.fire({
+      title: "Delete Product?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#64748b",
+      confirmButtonText: "Yes, delete it!",
+      background: "#ffffff",
+      color: "#0f172a",
+      borderRadius: "16px"
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await api.delete(`/products/${product._id || product.id}`);
+        await Swal.fire({
+          title: "Deleted!",
+          text: "The product has been removed.",
+          icon: "success",
+          confirmButtonColor: "#2563eb",
+          timer: 1500,
+          showConfirmButton: false,
+          borderRadius: "16px"
+        });
+        navigate("/");
+      } catch (err) {
+        Swal.fire({
+          title: "Error!",
+          text: err.response?.data?.message || "Something went wrong",
+          icon: "error",
+          confirmButtonColor: "#2563eb",
+          borderRadius: "16px"
+        });
+      }
     }
   };
 
