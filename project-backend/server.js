@@ -14,19 +14,20 @@ const app = express();
 
 app.use(helmet());
 
-const allowedOrigins = process.env.CLIENT_ORIGIN.split(",");
+// Split origins and trim whitespace
+const allowedOrigins = (process.env.CLIENT_ORIGIN || "").split(",").map(o => o.trim());
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow Postman / mobile apps
-
-    if (allowedOrigins.includes(origin)) {
+    // If it's a server-side request (no origin) or the origin is in our list
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.error(`Blocked by CORS: ${origin}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true
+  credentials: true,
 }));
 
 app.use(express.json({ limit: '10mb' }));
