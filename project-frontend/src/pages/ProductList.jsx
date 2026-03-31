@@ -137,6 +137,12 @@ const ProductList = () => {
           {products.map((p) => (
             <div key={p.id} className="product-card">
               <div className="product-card-image">
+                {p.discountedPrice && (
+                  <div className="product-card-discount-badge">
+                    <span className="discount-icon">↓</span>
+                    {Math.round((1 - parseFloat(p.discountedPrice) / parseFloat(p.price)) * 100)}% OFF
+                  </div>
+                )}
                 {p.galleryImages?.[0] ? (
                   <img
                     src={p.galleryImages[0]}

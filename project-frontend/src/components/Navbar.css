@@ -1,67 +1,158 @@
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2rem;
-  height: 64px;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ─── TOKENS (matches LandingPage.css & Auth.css) ───── */
+:root {
+  --lp-brand:  #1a1a2e;
+  --lp-accent: #e8c547;
+  --lp-red:    #ff6b6b;
+  --lp-light:  #f8f6f0;
+  --lp-muted:  #9b9b8a;
+  --lp-white:  #ffffff;
+  --lp-border: rgba(0, 0, 0, 0.08);
+}
+
+/* ─── NAV SHELL ──────────────────────────────────────── */
+.nb-nav {
   position: sticky;
   top: 0;
-  z-index: 100;
-}
-
-.navbar-brand a {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #0f172a;
-  text-decoration: none;
-  letter-spacing: -0.5px;
-}
-
-.navbar-links {
+  z-index: 200;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
+  padding: 0 3rem;
+  height: 64px;
+  background: var(--lp-light);
+  border-bottom: 1px solid var(--lp-border);
+  font-family: 'DM Sans', sans-serif;
 }
 
-.navbar-links a {
-  color: #475569;
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-}
-
-#nav-login-link {
-  border: 1px solid #cbd5e1;
-  color: #1e293b;
-  margin-right: 0.5rem;
-}
-
-#nav-login-link:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
-}
-
-#nav-signup-link {
-  background: #0f172a;
-  color: #ffffff;
-  border: 1px solid #0f172a;
-}
-
-#nav-signup-link:hover {
-  background: #1e293b;
-  border-color: #1e293b;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.nav-user {
-  color: #0f172a;
-  font-size: 0.85rem;
+/* ─── LOGO ───────────────────────────────────────────── */
+.nb-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-right: 1rem;
+  letter-spacing: -0.5px;
+  color: var(--lp-brand);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.nb-logo:hover { opacity: 0.75; }
+.nb-logo span  { color: var(--lp-red); }
+
+/* ─── CENTER LINKS ───────────────────────────────────── */
+.nb-center {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+  justify-content: center;
+}
+
+/* ─── SHARED LINK STYLE ──────────────────────────────── */
+.nb-link {
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--lp-muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.18s;
+}
+.nb-link:hover { color: var(--lp-brand); }
+
+/* ─── RIGHT SIDE ─────────────────────────────────────── */
+.nb-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* ─── USER PILL ──────────────────────────────────────── */
+.nb-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nb-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--lp-brand);
+  color: var(--lp-accent);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nb-username {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--lp-brand);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── DIVIDER ────────────────────────────────────────── */
+.nb-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--lp-border);
+  flex-shrink: 0;
+}
+
+/* ─── GHOST BUTTON (logout) ──────────────────────────── */
+.nb-btn-ghost {
+  background: none;
+  border: 1px solid var(--lp-border);
+  border-radius: 100px;
+  padding: 0.42rem 1.1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 400;
+  color: var(--lp-muted);
+  cursor: pointer;
+  transition: color 0.18s, border-color 0.18s;
+}
+.nb-btn-ghost:hover {
+  color: var(--lp-brand);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* ─── PRIMARY BUTTON (get started) ──────────────────── */
+.nb-btn-primary {
+  background: var(--lp-brand);
+  color: var(--lp-accent);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.5rem 1.35rem;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: opacity 0.18s, transform 0.15s;
+  white-space: nowrap;
+}
+.nb-btn-primary:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nb-nav    { padding: 0 1.25rem; gap: 1rem; }
+  .nb-center { display: none; }
+  .nb-username { display: none; }
+  .nb-right  { gap: 0.85rem; }
+}
+
+@media (max-width: 420px) {
+  .nb-btn-primary { padding: 0.45rem 1rem; font-size: 0.8rem; }
+  .nb-btn-ghost   { padding: 0.4rem 0.85rem; }
 }

@@ -10,6 +10,7 @@ const Login = () => {
   const [form, setForm] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
   const handleChange = (e) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -24,7 +25,10 @@ const Login = () => {
       login(res.data.user, res.data.token);
       navigate("/");
     } catch (err) {
-      const msg = err.response?.data?.errors || [err.response?.data?.message || "Login failed"];
+      const msg =
+        err.response?.data?.errors || [
+          err.response?.data?.message || "Login failed",
+        ];
       setErrors(Array.isArray(msg) ? msg : [msg]);
     } finally {
       setLoading(false);
@@ -32,53 +36,106 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-icon">🔑</div>
-        <h1 className="auth-title">Welcome back</h1>
-        <p className="auth-subtitle">Sign in to manage your products</p>
+    <div className="auth-root">
 
-        {errors.length > 0 && (
-          <div className="auth-error" role="alert">
-            {errors.map((e, i) => <p key={i}>{e}</p>)}
-          </div>
-        )}
+      {/* ── Left decorative panel ── */}
+      <div className="auth-panel">
+        <Link to="/" className="auth-panel-logo">
+          Product<span>Hub</span>
+        </Link>
 
-        <form onSubmit={handleSubmit} className="auth-form" id="login-form">
-          <div className="form-group">
-            <label htmlFor="login-username">Username</label>
-            <input
-              id="login-username"
-              name="username"
-              type="text"
-              value={form.username}
-              onChange={handleChange}
-              placeholder="Enter your username"
-              autoComplete="username"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="login-password">Password</label>
-            <input
-              id="login-password"
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              autoComplete="current-password"
-              required
-            />
-          </div>
-          <button id="login-submit-btn" type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Signing in…" : "Sign In"}
-          </button>
-        </form>
+        <div className="auth-panel-body">
+          <blockquote className="auth-quote">
+            "Manage your digital products with precision and speed."
+          </blockquote>
 
-        <p className="auth-footer">
-          Don&apos;t have an account? <Link to="/signup" id="login-signup-link">Sign up</Link>
-        </p>
+          <div className="auth-panel-cards">
+            {[
+              { emoji: "👟", name: "Air Runner Pro",  price: "₹4,299",  bg: "#fff8e1" },
+              { emoji: "🎧", name: "SoundPod Elite",  price: "₹8,999",  bg: "#e8f4fd" },
+              { emoji: "📷", name: "LensCraft 4K",    price: "₹24,500", bg: "#fce8e8" },
+            ].map((p) => (
+              <div className="auth-mini-card" key={p.name}>
+                <span className="auth-mini-thumb" style={{ background: p.bg }}>{p.emoji}</span>
+                <span className="auth-mini-name">{p.name}</span>
+                <span className="auth-mini-price">{p.price}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="auth-panel-footer">ProductHub · Built for modern commerce</div>
+      </div>
+
+      {/* ── Right form side ── */}
+      <div className="auth-form-side">
+        <div className="auth-form-box">
+          <div className="auth-eyebrow">Welcome back</div>
+          <h1 className="auth-heading">
+            Sign in to your<br /><em>dashboard</em>
+          </h1>
+          <p className="auth-sub">Enter your credentials to continue.</p>
+
+          {errors.length > 0 && (
+            <div className="auth-error" role="alert">
+              {errors.map((e, i) => <p key={i}>{e}</p>)}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} id="login-form" noValidate>
+            <div className="auth-field">
+              <label htmlFor="login-username">Username</label>
+              <input
+                id="login-username"
+                name="username"
+                type="text"
+                value={form.username}
+                onChange={handleChange}
+                placeholder="your_username"
+                autoComplete="username"
+                required
+              />
+            </div>
+
+            <div className="auth-field">
+              <label htmlFor="login-password">Password</label>
+              <div className="auth-pass-wrap">
+                <input
+                  id="login-password"
+                  name="password"
+                  type={showPass ? "text" : "password"}
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                  required
+                />
+                <button
+                  type="button"
+                  className="auth-pass-toggle"
+                  onClick={() => setShowPass((v) => !v)}
+                  aria-label={showPass ? "Hide password" : "Show password"}
+                >
+                  {showPass ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            <button
+              id="login-submit-btn"
+              type="submit"
+              className="auth-submit"
+              disabled={loading}
+            >
+              {loading ? <span className="auth-spinner" /> : "Sign In →"}
+            </button>
+          </form>
+
+          <p className="auth-switch">
+            Don&apos;t have an account?{" "}
+            <Link to="/signup" id="login-signup-link">Create one</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

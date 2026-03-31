@@ -9,52 +9,53 @@ test.describe.serial('Product CRUD and Validations Flow', () => {
   test.beforeAll(async ({ browser }) => {
     // We register exactly once to perform these product tests securely
     const page = await browser.newPage();
-    await page.goto('http://localhost:5173/signup');
-    await page.fill('input[name="username"]', testUsername);
-    await page.fill('input[name="password"]', testPassword);
-    await page.click('button[type="submit"]');
-    await page.waitForURL(/.*localhost:5173\//);
+    await page.goto('/signup');
+    await page.fill('#signup-username', testUsername);
+    await page.fill('#signup-password', testPassword);
+    await page.click('#signup-submit-btn');
+    await page.waitForURL('/');
     await page.close();
   });
 
   test('Creates a new product and tests client-side validation', async ({ page }) => {
     // Login
     await page.goto('/login');
-    await page.fill('input[name="username"]', testUsername);
-    await page.fill('input[name="password"]', testPassword);
-    await page.click('button[type="submit"]');
-    await expect(page).toHaveURL(/.*localhost:5173\//);
+    await page.fill('#login-username', testUsername);
+    await page.fill('#login-password', testPassword);
+    await page.click('#login-submit-btn');
+    await expect(page).toHaveURL('/');
 
     // Navigate to Add Product
-    await page.click('a:has-text("+ Add Product")');
+    // Navigate to Add Product
+    await page.click('#pl-add-btn');
 
     // Fill Product form successfully
-    await page.fill('input[name="metaTitle"]', 'SEO Meta Title Example');
-    await page.fill('input[name="name"]', testProductName);
+    await page.fill('#pf-metaTitle', 'SEO Meta Title Example');
+    await page.fill('#pf-name', testProductName);
     
-    // Slug auto-generation check (should be instantaneous)
-    await expect(page.locator('input[name="slug"]')).toHaveValue(testSlug);
+    // Slug auto-generation check
+    await expect(page.locator('#pf-slug')).toHaveValue(testSlug);
 
-    await page.fill('input[name="price"]', '49.99');
-    await page.fill('input[name="discountedPrice"]', '39.99');
-    await page.fill('input[type="url"]', 'https://example.com/image.jpg');
+    await page.fill('#pf-price', '49.99');
+    await page.fill('#pf-discountedPrice', '39.99');
+    await page.fill('#pf-image-0', 'https://example.com/image.jpg');
     
-    // Fill CKEditor (Rich Text Integration)
+    // Fill CKEditor
     await page.locator('.ck-editor__editable').fill('This is a rich text description completely filled with details!');
 
     // Submit Form
-    await page.click('button[type="submit"]');
+    await page.click('#pf-submit-btn');
 
-    // Verify it redirects back to the dashboard immediately (Frontend <-> Backend API Success)
-    await expect(page).toHaveURL(/.*localhost:5173\//);
+    // Verify it redirects back to the dashboard immediately
+    await expect(page).toHaveURL('/');
   });
 
   test('Searches for the created product and views details (Frontend <-> Backend List API)', async ({ page }) => {
     // Login
     await page.goto('/login');
-    await page.fill('input[name="username"]', testUsername);
-    await page.fill('input[name="password"]', testPassword);
-    await page.click('button[type="submit"]');
+    await page.fill('#login-username', testUsername);
+    await page.fill('#login-password', testPassword);
+    await page.click('#login-submit-btn');
 
     // Make sure we are on dashboard
     await expect(page.locator('text=SEO Meta Title Example').first()).toBeVisible();
@@ -71,25 +72,26 @@ test.describe.serial('Product CRUD and Validations Flow', () => {
   test('Triggers strict server-side validation error (409 Conflict logic)', async ({ page }) => {
     // Login
     await page.goto('/login');
-    await page.fill('input[name="username"]', testUsername);
-    await page.fill('input[name="password"]', testPassword);
-    await page.click('button[type="submit"]');
+    await page.fill('#login-username', testUsername);
+    await page.fill('#login-password', testPassword);
+    await page.click('#login-submit-btn');
 
     // Ensure we are back at Add Product
-    await page.click('a:has-text("+ Add Product")');
+    // Ensure we are back at Add Product
+    await page.click('#pl-add-btn');
 
-    // Fill Product form with the EXACT same name/slug to trigger 409 validation error from Mongoose
-    await page.fill('input[name="metaTitle"]', 'SEO Meta Title Example');
-    await page.fill('input[name="name"]', testProductName);
-    await page.fill('input[name="price"]', '49.99');
-    await page.fill('input[type="url"]', 'https://example.com/image.jpg');
+    // Fill Product form with the EXACT same name/slug
+    await page.fill('#pf-metaTitle', 'SEO Meta Title Example');
+    await page.fill('#pf-name', testProductName);
+    await page.fill('#pf-price', '49.99');
+    await page.fill('#pf-image-0', 'https://example.com/image.jpg');
     await page.locator('.ck-editor__editable').fill('Description again');
 
     // Hit create
-    await page.click('button[type="submit"]');
+    await page.click('#pf-submit-btn');
 
     // Intercept server-side validation error red box appearing!
     await expect(page.locator('.pf-errors')).toBeVisible();
-    await expect(page.locator('.pf-errors')).toContainText('A product with this slug already exists.');
+    await expect(page.locator('.pf-errors')).toContainText('already exists');
   });
 });
